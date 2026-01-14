@@ -1,0 +1,9 @@
+.git
+.dart_tool
+.dart_frog
+build
+.env
+docker-compose.yaml
+docker-compose.prod.yaml
+Jenkinsfile
+test

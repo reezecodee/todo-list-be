@@ -1,0 +1,26 @@
+name: my_backend
+description: Simple CRUD Backend with Dart Frog, Postgres, and Redis.
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  # Framework Utama
+  dart_frog: ^1.2.0
+
+  # Database Driver
+  postgres: ^3.1.0  
+  redis: ^3.0.0     
+
+  # Utilities
+  dotenv: ^4.2.0    
+  json_annotation: ^4.9.0 
+
+dev_dependencies:
+  # Testing & Linter
+  test: ^1.25.0
+  mocktail: ^1.0.0  # Buat mocking DB pas testing di Jenkins
+  lints: ^3.0.0     # Standar kerapian kodingan Dart
+  build_runner: ^2.4.0 # (Opsional) kalau mau generate code JSON otomatis

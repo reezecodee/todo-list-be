@@ -1,0 +1,36 @@
+# -------------------------
+# Dart & Dart Frog Artifacts
+# -------------------------
+.dart_frog/
+.dart_tool/
+build/
+.packages
+.pub/
+
+# -------------------------
+# Secrets / Environment Variables
+# -------------------------
+.env
+*.env
+.env.*
+
+# -------------------------
+# IDE & Editor Config
+# -------------------------
+.vscode/
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# -------------------------
+# OS Junk Files
+# -------------------------
+.DS_Store
+Thumbs.db
+
+# -------------------------
+# Local Docker Volumes
+# -------------------------
+postgres_data/
+redis_data/

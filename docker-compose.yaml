@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: dev_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}       # Baca dari file .env
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:5432" # Expose ke laptop biar bisa diakses code Dart lokal
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Caching
+  redis:
+    image: redis:alpine
+    container_name: dev_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:

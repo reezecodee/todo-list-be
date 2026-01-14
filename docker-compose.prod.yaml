@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  app:
+    image: dart_backend:latest
+    container_name: dart_prod_backend
+    restart: always
+    ports:
+      - "80:8080"  
+    environment:
+      DB_HOST: postgres_prod
+      REDIS_HOST: redis_prod
+      DB_PASSWORD: ${DB_PASSWORD}
+    depends_on:
+      - postgres_prod
+      - redis_prod
+
+  postgres_prod:
+    image: postgres:15-alpine
+    container_name: prod_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - postgres_prod_data:/var/lib/postgresql/data
+
+  redis_prod:
+    image: redis:alpine
+    container_name: prod_redis
+    restart: always
+    volumes:
+      - redis_prod_data:/data
+
+volumes:
+  postgres_prod_data:
+  redis_prod_data:
