@@ -6,7 +6,7 @@ services:
     container_name: dev_postgres
     restart: always
     environment:
-      POSTGRES_USER: ${DB_USER}       # Baca dari file .env
+      POSTGRES_USER: ${DB_USER}       
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
     ports:

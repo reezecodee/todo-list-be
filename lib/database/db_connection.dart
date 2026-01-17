@@ -1,27 +1,58 @@
-import 'dart:io';
 import 'package:postgres/postgres.dart';
 import 'package:redis/redis.dart';
+import 'package:dotenv/dotenv.dart';
 
 class AppDatabase {
-  late Connection postgres;
-  late Command redisCommand;
+  static final AppDatabase _instance = AppDatabase._internal();
+
+  Connection? _postgres;
+  Command? _redisCommand;
+
+  factory AppDatabase() {
+    return _instance;
+  }
+
+  AppDatabase._internal();
+
+  Connection get postgres {
+    if (_postgres == null)
+      throw Exception('Database belum terkoneksi! Panggil init() dulu.');
+    return _postgres!;
+  }
+
+  Command get redisCommand {
+    if (_redisCommand == null)
+      throw Exception('Redis belum terkoneksi! Panggil init() dulu.');
+    return _redisCommand!;
+  }
 
   Future<void> init() async {
-    postgres = await Connection.open(
+    if (_postgres != null && _redisCommand != null) return;
+
+    print('🔄 Loading .env and Connecting to Databases...');
+
+    var env = DotEnv(includePlatformEnvironment: true)..load();
+
+    final dbHost = env['DB_HOST'] ?? 'localhost';
+    final dbName = env['DB_NAME'] ?? 'dart_todo_db';
+    final dbUser = env['DB_USER'] ?? 'postgres';
+    final dbPass = env['DB_PASSWORD'] ?? 'password';
+
+    // Setup Postgres
+    _postgres = await Connection.open(
       Endpoint(
-        host: Platform.environment['DB_HOST'] ?? 'localhost',
-        database: Platform.environment['DB_NAME'] ?? 'postgres',
-        username: Platform.environment['DB_USER'] ?? 'postgres',
-        password: Platform.environment['DB_PASSWORD'] ?? 'password',
-        port: int.parse(Platform.environment['DB_PORT'] ?? '5432'),
+        host: dbHost,
+        database: dbName,
+        username: dbUser,
+        password: dbPass, 
       ),
       settings: ConnectionSettings(sslMode: SslMode.disable),
     );
 
+    // Setup Redis
     final redisConn = RedisConnection();
-    final redisHost = Platform.environment['REDIS_HOST'] ?? 'localhost';
-    final redisPort = int.parse(Platform.environment['REDIS_PORT'] ?? '6379');
+    _redisCommand = await redisConn.connect(dbHost, 6379);
 
-    redisCommand = await redisConn.connect(redisHost, redisPort);
+    print('✅ Database Connected via .env configuration!');
   }
 }

@@ -1,4 +1,4 @@
-name: my_backend
+name: todo_backend
 description: Simple CRUD Backend with Dart Frog, Postgres, and Redis.
 version: 1.0.0
 publish_to: none

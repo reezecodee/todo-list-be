@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   app:
@@ -6,11 +6,17 @@ services:
     container_name: dart_prod_backend
     restart: always
     ports:
-      - "80:8080"  
+      - "80:8080"
     environment:
+      # Network Config
       DB_HOST: postgres_prod
       REDIS_HOST: redis_prod
+
+      # Credential dari .env
+      DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+
     depends_on:
       - postgres_prod
       - redis_prod

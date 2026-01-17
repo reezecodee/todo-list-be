@@ -1,5 +1,5 @@
 import 'package:dart_frog/dart_frog.dart';
-import '../lib/database/db_connection.dart';
+import 'package:todo_backend/database/db_connection.dart';
 
 Future<Response> onRequest(RequestContext context) async {
   final db = context.read<AppDatabase>();

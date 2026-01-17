@@ -1,20 +1,20 @@
 import 'package:dart_frog/dart_frog.dart';
-import '../lib/database/db_connection.dart';
+import 'package:todo_backend/database/db_connection.dart';
+import 'package:todo_backend/services/todo_service.dart';
 
-AppDatabase? _db;
+final _db = AppDatabase();
+final _todoService = TodoService(_db);
 
 Handler middleware(Handler handler) {
+  // Urutan: Logger -> Inject DB -> Inject Service -> Handler Asli
+  final handlerWithDependencies = handler
+      .use(requestLogger())
+      .use(provider<AppDatabase>((_) => _db))
+      .use(provider<TodoService>((_) => _todoService));
+
   return (context) async {
-    if (_db == null) {
-      _db = AppDatabase();
-      await _db!.init();
-      print('✅ Database & Redis Connected!');
-    }
+    await _db.init();
 
-    final response = await handler
-        .use(provider<AppDatabase>((_) => _db!))
-        .call(context);
-
-    return response;
+    return handlerWithDependencies(context);
   };
 }
